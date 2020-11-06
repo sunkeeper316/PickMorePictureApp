@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/pickFragment">
+
+    <fragment
+        android:id="@+id/pickFragment"
+        android:name="com.charder.pickmorepictureapp.PickFragment"
+        android:label="fragment_pick"
+        tools:layout="@layout/fragment_pick" />
+</navigation>

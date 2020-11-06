@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PickMorePictureApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textPickPicture">Pick Picture</string>
+    <string name="textShouldGrant">permission to access external storage should be granted</string>
+    <string name="textNoImagePickerAppFound">no image picker app found</string>
+</resources>
