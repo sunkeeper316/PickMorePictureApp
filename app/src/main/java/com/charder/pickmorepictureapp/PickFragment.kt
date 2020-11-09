@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import java.io.IOException
@@ -76,14 +77,11 @@ class PickFragment : Fragment() {
                                 showitem.name = pathList.last() + ".jpg"
                                 showitem.img = bitmap
                                 showItemList.add(showitem)
-
-
                             }
                             showAdapter = ShowAdapter(requireActivity() , showItemList)
                             rv_show.adapter = showAdapter
                         }
                     }
-
                 }
             }
         }
@@ -144,6 +142,11 @@ class PickFragment : Fragment() {
             val showItem = showItemList.get(position)
             holder.tv_name.setText(showItem.name)
             holder.iv_show.setImageBitmap(showItem.img)
+            holder.itemView.setOnClickListener {
+                var b = Bundle()
+                b.putSerializable("showItem",showItem)
+                Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_imageViewFragment , b)
+            }
         }
 
     }

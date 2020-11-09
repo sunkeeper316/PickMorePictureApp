@@ -9,5 +9,14 @@
         android:id="@+id/pickFragment"
         android:name="com.charder.pickmorepictureapp.PickFragment"
         android:label="fragment_pick"
-        tools:layout="@layout/fragment_pick" />
+        tools:layout="@layout/fragment_pick" >
+        <action
+            android:id="@+id/action_pickFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="com.charder.pickmorepictureapp.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" />
 </navigation>
