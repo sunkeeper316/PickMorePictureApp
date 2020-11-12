@@ -31,9 +31,13 @@ class MainActivity : AppCompatActivity() {
 //                Log.e("MotionEvent" , "ACTION_MOVE")
 //            }
 //        }
-        if (scaleGestureDetector.onTouchEvent(event)){
-            return true
-        }
+//        val isScaleGestureDetector = scaleGestureDetector.onTouchEvent(event)
+//        val iGestureDetector = gestureDetector.onTouchEvent(event)
+//        if (isScaleGestureDetector){
+//            return true
+//        }else{
+//            return iGestureDetector
+//        }
         return super.onTouchEvent(event)
     }
 
