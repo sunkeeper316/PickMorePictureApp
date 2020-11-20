@@ -3,11 +3,13 @@ package com.charder.pickmorepictureapp
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,15 +21,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.charder.pickmorepictureapp.Room.entity.ImageItem
+import com.charder.pickmorepictureapp.Room.task.getAll
+import com.charder.pickmorepictureapp.Room.task.insert
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 
 
 class PickFragment : Fragment() {
 
     lateinit var bt_pick : Button
+    lateinit var bt_load : Button
     lateinit var rv_show : RecyclerView
     lateinit var showAdapter : ShowAdapter
-    var showItemList :MutableList<ShowItem> = arrayListOf()
+    var imageItemList :MutableList<ImageItem> = arrayListOf()
 
     var uriList : MutableList<Uri> = arrayListOf()
 
@@ -42,8 +49,14 @@ class PickFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bt_pick = view.findViewById(R.id.bt_pick)
+        bt_load = view.findViewById(R.id.bt_load)
         rv_show = view.findViewById(R.id.rv_show)
+
         rv_show.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        bt_load.setOnClickListener {
+            loadId(requireActivity())
+            Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_loadFragment)
+        }
         bt_pick.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -55,6 +68,14 @@ class PickFragment : Fragment() {
                     activity, R.string.textNoImagePickerAppFound, Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+        getAll {
+            imageItemList = it
+            showAdapter = ShowAdapter(requireActivity() , imageItemList)
+            requireActivity().runOnUiThread {
+                rv_show.adapter = showAdapter
+            }
+
         }
     }
 
@@ -71,15 +92,31 @@ class PickFragment : Fragment() {
                                 val uri: Uri = item.uri
                                 uriList.add(uri)
                                 val bitmap: Bitmap? = loadFromUri(uri)
-                                val showitem = ShowItem()
+                                val imageItem = ImageItem()
                                 var path = uri.path.toString()
                                 val pathList = path.split("/")
-                                showitem.name = pathList.last() + ".jpg"
-                                showitem.img = bitmap
-                                showItemList.add(showitem)
+                                imageItem.name = pathList.last() + ".jpg"
+                                var cbitmap = compressionBitmap(bitmap!!)
+                                val baOutputStream : ByteArrayOutputStream = ByteArrayOutputStream()
+                                cbitmap?.compress(Bitmap.CompressFormat.PNG , 50 , baOutputStream)
+
+                                imageItem.imgBitmap = baOutputStream.toByteArray()
+                                imageItem.id = null
+                                insert(imageItem , callback = {
+//                                    imageItem.id = it
+                                    Log.e("imageTask","id: ${it} save ok")
+                                })
+
                             }
-                            showAdapter = ShowAdapter(requireActivity() , showItemList)
-                            rv_show.adapter = showAdapter
+                            getAll {
+                                imageItemList = it
+                                showAdapter = ShowAdapter(requireActivity() , imageItemList)
+                                requireActivity().runOnUiThread {
+                                    rv_show.adapter = showAdapter
+                                }
+
+                            }
+
                         }
                     }
                 }
@@ -119,7 +156,7 @@ class PickFragment : Fragment() {
 //            }
 //        }
 //    }
-    inner class ShowAdapter(val _activity: Activity, val showItemList: MutableList<ShowItem>) : RecyclerView.Adapter<ShowAdapter.ShowViewHolder>() {
+    inner class ShowAdapter(val _activity: Activity, val imageItemList: MutableList<ImageItem>) : RecyclerView.Adapter<ShowAdapter.ShowViewHolder>() {
 
         inner class ShowViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
             val tv_name = itemView.findViewById<TextView>(R.id.tv_name)
@@ -135,16 +172,18 @@ class PickFragment : Fragment() {
             )
         }
 
-        override fun getItemCount(): Int { return showItemList.size }
+        override fun getItemCount(): Int { return imageItemList.size }
 
 
         override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
-            val showItem = showItemList.get(position)
-            holder.tv_name.setText(showItem.name)
-            holder.iv_show.setImageBitmap(showItem.img)
+            val imageItem = imageItemList.get(position)
+            holder.tv_name.setText(imageItem.name)
+            var bitmap = BitmapFactory.decodeByteArray(imageItem.imgBitmap , 0 , imageItem.imgBitmap!!.size)
+            bitmap = restoreBitmap(bitmap)
+            holder.iv_show.setImageBitmap(bitmap)
             holder.itemView.setOnClickListener {
                 var b = Bundle()
-                b.putSerializable("showItem",showItem)
+                b.putSerializable("imageItem",imageItem)
                 Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_imageViewFragment , b)
             }
         }

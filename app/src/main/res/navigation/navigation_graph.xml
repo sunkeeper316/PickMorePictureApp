@@ -13,10 +13,27 @@
         <action
             android:id="@+id/action_pickFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_pickFragment_to_loadFragment"
+            app:destination="@id/loadFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageViewFragment"
         android:name="com.charder.pickmorepictureapp.ImageViewFragment"
         android:label="fragment_image_view"
-        tools:layout="@layout/fragment_image_view" />
+        tools:layout="@layout/fragment_image_view" >
+        <action
+            android:id="@+id/action_imageViewFragment_to_rotateZoomImageViewFragment"
+            app:destination="@id/rotateZoomImageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rotateZoomImageViewFragment"
+        android:name="com.charder.pickmorepictureapp.RotateZoomImageViewFragment"
+        android:label="fragment_rotate_zoom_image_view"
+        tools:layout="@layout/fragment_rotate_zoom_image_view" />
+    <fragment
+        android:id="@+id/loadFragment"
+        android:name="com.charder.pickmorepictureapp.LoadFragment"
+        android:label="fragment_load"
+        tools:layout="@layout/fragment_load" />
 </navigation>

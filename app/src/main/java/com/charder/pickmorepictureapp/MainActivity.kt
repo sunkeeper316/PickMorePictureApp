@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import androidx.room.Room
+import com.charder.pickmorepictureapp.Room.db.AppDatabase
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        db = Room.databaseBuilder(this,AppDatabase::class.java , "ImageDB").build()
+
     }
 
     
