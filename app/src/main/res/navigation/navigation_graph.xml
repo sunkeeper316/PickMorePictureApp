@@ -36,4 +36,9 @@
         android:name="com.charder.pickmorepictureapp.LoadFragment"
         android:label="fragment_load"
         tools:layout="@layout/fragment_load" />
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.charder.pickmorepictureapp.PhotoFragment"
+        android:label="fragment_photo"
+        tools:layout="@layout/fragment_photo" />
 </navigation>

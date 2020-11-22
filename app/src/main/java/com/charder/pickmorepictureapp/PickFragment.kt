@@ -5,7 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -23,9 +25,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.charder.pickmorepictureapp.Room.entity.ImageItem
 import com.charder.pickmorepictureapp.Room.task.getAll
+import com.charder.pickmorepictureapp.Room.task.getImageItemById
 import com.charder.pickmorepictureapp.Room.task.insert
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URI
+import java.net.URL
 
 
 class PickFragment : Fragment() {
@@ -55,7 +61,45 @@ class PickFragment : Fragment() {
         rv_show.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         bt_load.setOnClickListener {
             loadId(requireActivity())
-            Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_loadFragment)
+//            Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_loadFragment)
+
+            getImageItemById(currentId!!,callback = { imageItem ->
+//                try {
+//                    val imageUrl = URL(testUrl)
+//                    val bitmap = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream())
+//                    requireActivity().runOnUiThread{
+//                        val uri = getImageUri(requireActivity(), bitmap)
+//                        uri?.let{
+//                            var uris : MutableList<Uri> = arrayListOf()
+//                            uris.add(it)
+//                            imagefullScreen(requireActivity() , uris , 0)
+//                        }
+//                    }
+//                }catch (e : MalformedURLException) {
+//                    e.printStackTrace();
+//                } catch ( e: IOException) {
+//                    e.printStackTrace();
+//                } catch (e: IllegalStateException) {
+//                    e.printStackTrace();
+//                }
+
+
+                requireActivity().runOnUiThread {
+//                var bitmap = BitmapFactory.decodeByteArray(imageItem.imgBitmap , 0 , imageItem.imgBitmap!!.size)
+//                bitmap = restoreBitmap(bitmap)
+                    val testuri = urlTouri(testUrl)
+                    Log.e("testuri","${testuri}")
+                    testuri?.let{
+                            var uris : MutableList<Uri> = arrayListOf()
+                            uris.add(it)
+                            imagefullScreen(requireActivity() , uris , 0)
+                    }
+                }
+
+
+
+            })
+
         }
         bt_pick.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -182,9 +226,17 @@ class PickFragment : Fragment() {
             bitmap = restoreBitmap(bitmap)
             holder.iv_show.setImageBitmap(bitmap)
             holder.itemView.setOnClickListener {
-                var b = Bundle()
-                b.putSerializable("imageItem",imageItem)
-                Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_imageViewFragment , b)
+//                var b = Bundle()
+//                b.putSerializable("imageItem",imageItem)
+//                Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_imageViewFragment , b)
+
+                var uris : MutableList<Uri> = arrayListOf()
+                for (item in imageItemList){
+                    var bitmap = BitmapFactory.decodeByteArray(item.imgBitmap , 0 , item.imgBitmap!!.size)
+                    bitmap = restoreBitmap(bitmap)
+                    uris.add(getImageUri(_activity , bitmap)!!)
+                }
+                imagefullScreen(requireActivity() , uris , position)
             }
         }
 
