@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment" />
 
-    <ImageView
+    <com.github.tntkhang.fullscreenimageview.library.TouchImageView
         android:id="@+id/iv_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

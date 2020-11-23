@@ -16,13 +16,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.charder.pickmorepictureapp.Room.entity.ImageItem
 import com.charder.pickmorepictureapp.Room.task.getImageItemById
+import com.github.tntkhang.fullscreenimageview.library.TouchImageView
 
 
 class LoadFragment : Fragment() {
 
     lateinit var imageitem : ImageItem
 
-    lateinit var iv_show : ImageView
+    lateinit var iv_show : TouchImageView
 
     lateinit var tv_show : TextView
     lateinit var tv_show2 : TextView
@@ -127,15 +128,15 @@ class LoadFragment : Fragment() {
 
 
         })
-        view.setOnTouchListener{ v, event ->
-            val isScaleGestureDetector = scaleGestureDetector.onTouchEvent(event)
-//            val iGestureDetector = gestureDetector.onTouchEvent(event)
-            if (isScaleGestureDetector){
-                return@setOnTouchListener isScaleGestureDetector
-            }else
-                return@setOnTouchListener true
-//                return@setOnTouchListener iGestureDetector
-            }
+//        view.setOnTouchListener{ v, event ->
+//            val isScaleGestureDetector = scaleGestureDetector.onTouchEvent(event)
+////            val iGestureDetector = gestureDetector.onTouchEvent(event)
+//            if (isScaleGestureDetector){
+//                return@setOnTouchListener isScaleGestureDetector
+//            }else
+//                return@setOnTouchListener true
+////                return@setOnTouchListener iGestureDetector
+//        }
 
     }
 }

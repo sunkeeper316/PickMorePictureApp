@@ -61,7 +61,7 @@ class PickFragment : Fragment() {
         rv_show.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         bt_load.setOnClickListener {
             loadId(requireActivity())
-//            Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_loadFragment)
+            Navigation.findNavController(it).navigate(R.id.action_pickFragment_to_loadFragment)
 
             getImageItemById(currentId!!,callback = { imageItem ->
 //                try {
@@ -84,22 +84,18 @@ class PickFragment : Fragment() {
 //                }
 
 
-                requireActivity().runOnUiThread {
-//                var bitmap = BitmapFactory.decodeByteArray(imageItem.imgBitmap , 0 , imageItem.imgBitmap!!.size)
-//                bitmap = restoreBitmap(bitmap)
-                    val testuri = urlTouri(testUrl)
-                    Log.e("testuri","${testuri}")
-                    testuri?.let{
-                            var uris : MutableList<Uri> = arrayListOf()
-                            uris.add(it)
-                            imagefullScreen(requireActivity() , uris , 0)
-                    }
-                }
-
-
-
+//                requireActivity().runOnUiThread {
+////                var bitmap = BitmapFactory.decodeByteArray(imageItem.imgBitmap , 0 , imageItem.imgBitmap!!.size)
+////                bitmap = restoreBitmap(bitmap)
+//                    val testuri = urlTouri(testUrl)
+//                    Log.e("testuri","${testuri}")
+//                    testuri?.let{
+//                            var uris : MutableList<Uri> = arrayListOf()
+//                            uris.add(it)
+//                            imagefullScreen(requireActivity() , uris , 0)
+//                    }
+//                }
             })
-
         }
         bt_pick.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
